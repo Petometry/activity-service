@@ -1,7 +1,7 @@
-package com.frameboter.template.rest;
+package com.petometry.activity.rest;
 
-import com.frameboter.template.Application;
-import com.frameboter.template.rest.model.Ping;
+import com.petometry.activity.Application;
+import com.petometry.activity.rest.model.Ping;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
