@@ -2,7 +2,7 @@ package com.petometry.activity.service;
 
 import com.petometry.activity.repository.ActivityRepository;
 import com.petometry.activity.repository.model.Activity;
-import com.petometry.activity.rest.model.ActivityRequest;
+import com.petometry.activity.rest.model.ActivityDto;
 import com.petometry.activity.service.model.currency.CurrencyBalance;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -27,24 +27,29 @@ public class WorkServiceImpl implements WorkService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Activity createActivity(String userId, ActivityRequest activityRequest) {
-
-        if (LocalDateTime.now().plusHours(10).isBefore(activityRequest.getEndTime())) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
+    public Activity createActivity(String userId, ActivityDto activityRequest) {
 
         Activity activity = modelMapper.map(activityRequest, Activity.class);
         activity.setType(WORK);
         activity.setOwnerId(userId);
         activity.setStartTime(LocalDateTime.now());
+        long hoursBetween = activity.getStartTime().until(activity.getEndTime(), ChronoUnit.HOURS);
+        if (hoursBetween > 10 || hoursBetween < 1){
+            throw  new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        activity.setEndTime(LocalDateTime.now().plusHours(hoursBetween));
+        activity.setReward(calculateReward(activity));
         return activityRepository.save(activity);
     }
 
     @Override
     public CurrencyBalance finishActivity(Jwt jwt, Activity activity) {
 
+        return currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
+    }
+
+    private static double calculateReward(Activity activity) {
         long hoursBetween = activity.getStartTime().until(activity.getEndTime(), ChronoUnit.HOURS);
-        double reward = hoursBetween * 0.1;
-        return currencyService.getPayedByServer(jwt, activity.getOwnerId(), reward);
+        return hoursBetween * 0.1;
     }
 }

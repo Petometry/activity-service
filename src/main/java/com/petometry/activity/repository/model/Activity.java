@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "activity")
 public class Activity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -27,5 +28,8 @@ public class Activity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private ActivityType type;
+
+    @Column(name = "reward", nullable = false)
+    private Double reward;
 
 }
