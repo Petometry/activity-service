@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @ToString
 public class ActivityDto implements Serializable {
 
-    ActivityType type;
+    private ActivityType type;
 
-    LocalDateTime startTime;
+    private LocalDateTime startTime;
 
-    LocalDateTime endTime;
+    private LocalDateTime endTime;
 
     private Double reward;
 }

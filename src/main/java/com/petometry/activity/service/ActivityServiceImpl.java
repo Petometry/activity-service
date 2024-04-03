@@ -3,7 +3,6 @@ package com.petometry.activity.service;
 import com.petometry.activity.repository.ActivityRepository;
 import com.petometry.activity.repository.model.Activity;
 import com.petometry.activity.rest.model.ActivityDto;
-import com.petometry.activity.service.model.currency.CurrencyBalance;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatusCode;
@@ -31,34 +30,13 @@ public class ActivityServiceImpl implements ActivityService {
 
         Optional<Activity> activityOptional = activityRepository.findByOwnerId(userId);
 
-        if (activityOptional.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        if (activityOptional.isEmpty()) {
+            return null;
         }
         Activity activity = activityOptional.get();
-        if (LocalDateTime.now().isAfter(activity.getEndTime())){
+        if (LocalDateTime.now().isAfter(activity.getEndTime())) {
             finishActivity(jwt, activity);
         }
-        return modelMapper.map(activity, ActivityDto.class);
-    }
-
-    @Override
-    public ActivityDto startNewActivity(String userId, ActivityDto activityRequest) {
-
-        if (activityRequest.getEndTime() == null || LocalDateTime.now().isAfter(activityRequest.getEndTime())){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
-
-        if (activityRepository.existsByOwnerId(userId)){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
-        }
-
-        Activity activity;
-        if (WORK.equals(activityRequest.getType())){
-            activity = workService.createActivity(userId, activityRequest);
-        }else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
-
         return modelMapper.map(activity, ActivityDto.class);
     }
 
@@ -67,15 +45,13 @@ public class ActivityServiceImpl implements ActivityService {
         activityRepository.deleteByOwnerId(userId);
     }
 
-    private CurrencyBalance finishActivity(Jwt jwt, Activity activity) {
+    private void finishActivity(Jwt jwt, Activity activity) {
 
-        CurrencyBalance currencyBalance;
-        if (WORK.equals(activity.getType())){
-            currencyBalance = workService.finishActivity(jwt, activity);
-        }else {
+        if (WORK.equals(activity.getType())) {
+            workService.finishActivity(jwt, activity);
+        } else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         activityRepository.delete(activity);
-        return currencyBalance;
     }
 }

@@ -3,7 +3,7 @@ package com.petometry.activity.service;
 import com.petometry.activity.repository.ActivityRepository;
 import com.petometry.activity.repository.model.Activity;
 import com.petometry.activity.rest.model.ActivityDto;
-import com.petometry.activity.service.model.currency.CurrencyBalance;
+import com.petometry.activity.rest.model.work.WorkActivity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatusCode;
@@ -27,25 +27,25 @@ public class WorkServiceImpl implements WorkService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Activity createActivity(String userId, ActivityDto activityRequest) {
+    public ActivityDto createActivity(String userId, WorkActivity workActivity) {
 
-        Activity activity = modelMapper.map(activityRequest, Activity.class);
+        if (activityRepository.existsByOwnerId(userId)) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
+        }
+
+        Activity activity = new Activity();
         activity.setType(WORK);
         activity.setOwnerId(userId);
         activity.setStartTime(LocalDateTime.now());
-        long hoursBetween = activity.getStartTime().until(activity.getEndTime(), ChronoUnit.HOURS);
-        if (hoursBetween > 10 || hoursBetween < 1){
-            throw  new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
-        activity.setEndTime(LocalDateTime.now().plusHours(hoursBetween));
+        activity.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
         activity.setReward(calculateReward(activity));
-        return activityRepository.save(activity);
+        Activity createdActivity = activityRepository.save(activity);
+        return modelMapper.map(createdActivity, ActivityDto.class);
     }
 
     @Override
-    public CurrencyBalance finishActivity(Jwt jwt, Activity activity) {
-
-        return currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
+    public void finishActivity(Jwt jwt, Activity activity) {
+        currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
     }
 
     private static double calculateReward(Activity activity) {
