@@ -46,6 +46,7 @@ public class WorkServiceImpl implements WorkService {
     @Override
     public void finishActivity(Jwt jwt, Activity activity) {
         currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
+        activity.setCurrency("geocoin");
     }
 
     private static double calculateReward(Activity activity) {
