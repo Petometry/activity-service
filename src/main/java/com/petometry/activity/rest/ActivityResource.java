@@ -46,12 +46,4 @@ public class ActivityResource extends AbstractResource {
             @ApiResponse(responseCode = "200", description = "activity stopped successfully"),
             @ApiResponse(responseCode = "401", description = "User is not logged in via Keycloak", content = @Content),
     })
-    @DeleteMapping()
-    public void stopActivity(@AuthenticationPrincipal Jwt jwt) {
-        // @formatter:on
-        String userId = getUserId(jwt);
-        log.info("stopActivity started for userId={}", userId);
-        activityService.stopActivity(userId);
-        log.info("stopActivity finished for userId={}", getUserId(jwt));
-    }
 }
