@@ -28,6 +28,8 @@ public class WorkServiceImpl implements WorkService {
     
     private final CurrencyService currencyService;
 
+    private final ActivityService activityService;
+
     private final ModelMapper modelMapper;
 
     @Override
