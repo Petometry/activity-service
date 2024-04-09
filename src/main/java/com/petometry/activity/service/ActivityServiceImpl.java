@@ -21,31 +21,22 @@ import static com.petometry.activity.repository.model.ActivityType.WORK;
 @Service
 @RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
-
-    private final ActivityRepository activityRepository;
-
-    private final WorkRepository workRepository;
     
-    private final WorkService workService;
+    private final WorkRepository workRepository;
 
     private final ModelMapper modelMapper;
 
     @Override
     public ActivityDto getCurrentActivity(Jwt jwt, String userId) {
 
-        Optional<Activity> activityOptional = activityRepository.findByOwnerId(userId);
-        if (activityOptional.isEmpty()) {
+        Optional<Work> workOptional = workRepository.findByOwnerId(userId);
+        if (workOptional.isEmpty()) {
             return null;
         }
         
-        Activity activity = activityOptional.get();
+        Work activity = workOptional.get();
         Boolean isCollectable = LocalDateTime.now().isAfter(activity.getEndTime());
-        ActivityDto activityDto;
-        if (isCollectable) {
-            activityDto = finishActivity(jwt, activity);
-        }else{
-         activityDto = modelMapper.map(activity, ActivityDto.class);
-        }
+        ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
         activityDto.setCollectable(isCollectable);
         return activityDto;
     }
@@ -58,19 +49,5 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void stopActivity(String userId) {
         activityRepository.deleteByOwnerId(userId);
-    }
-
-    private ActivityDto finishActivity(Jwt jwt, Activity activity) {
-
-        ActivityDto activityDto;
-        if (WORK.equals(activity.getType())) {
-            workService.finishActivity(jwt, activity);
-            activityDto = modelMapper.map(activity, ActivityDto.class);
-            activityDto.setCurrency("geocoin");
-        } else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
-        activityRepository.delete(activity);
-        return activityDto;
     }
 }
