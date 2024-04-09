@@ -37,7 +37,9 @@ public class ActivityServiceImpl implements ActivityService {
         if (LocalDateTime.now().isAfter(activity.getEndTime())) {
             finishActivity(jwt, activity);
         }
-        return modelMapper.map(activity, ActivityDto.class);
+        ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+        activityDto.setCollectable = LocalDateTime.now().isAfter(activity.getEndTime())
+        return activityDto;
     }
 
     @Override
