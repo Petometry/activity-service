@@ -29,16 +29,17 @@ public class ActivityServiceImpl implements ActivityService {
     public ActivityDto getCurrentActivity(Jwt jwt, String userId) {
 
         Optional<Activity> activityOptional = activityRepository.findByOwnerId(userId);
-
         if (activityOptional.isEmpty()) {
             return null;
         }
+        
         Activity activity = activityOptional.get();
-        if (LocalDateTime.now().isAfter(activity.getEndTime())) {
+        Boolean isCollectable = LocalDateTime.now().isAfter(activity.getEndTime());
+        if (isCollectable) {
             finishActivity(jwt, activity);
         }
         ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
-        activityDto.setCollectable = LocalDateTime.now().isAfter(activity.getEndTime());
+        activityDto.setCollectable(isCollectable);
         return activityDto;
     }
 
