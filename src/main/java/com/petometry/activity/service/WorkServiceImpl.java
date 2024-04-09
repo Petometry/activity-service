@@ -22,6 +22,8 @@ public class WorkServiceImpl implements WorkService {
 
     private final ActivityRepository activityRepository;
 
+    private final WorkRepository workRepository;
+    
     private final CurrencyService currencyService;
 
     private final ModelMapper modelMapper;
@@ -41,6 +43,23 @@ public class WorkServiceImpl implements WorkService {
         activity.setReward(calculateReward(activity));
         Activity createdActivity = activityRepository.save(activity);
         return modelMapper.map(createdActivity, ActivityDto.class);
+    }
+
+        @Override
+    public WorkDto createWork(String userId, WorkActivity workActivity) {
+
+        if (activityService.hasActivity(userId)) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
+        }
+
+        Work work = new Work();
+        work.setType(WORK);
+        work.setOwnerId(userId);
+        work.setStartTime(LocalDateTime.now());
+        work.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
+        work.setReward(calculateReward(activity));
+        Work createdWork = workRepository.save(work);
+        return modelMapper.map(createdWork, ActivityDto.class);
     }
 
     @Override
