@@ -63,7 +63,7 @@ public class WorkServiceImpl implements WorkService {
         work.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
         work.setReward(calculateReward(work));
         Work createdWork = workRepository.save(work);
-        return modelMapper.map(createdWork, ActivityDto.class);
+        return modelMapper.map(createdWork, WorkDto.class);
     }
 
     @Override
