@@ -21,6 +21,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
 
+    private final WorkRepository workRepository;
+    
     private final WorkService workService;
 
     private final ModelMapper modelMapper;
@@ -43,6 +45,11 @@ public class ActivityServiceImpl implements ActivityService {
         }
         activityDto.setCollectable(isCollectable);
         return activityDto;
+    }
+    
+    @Override
+    public Boolean hasActivity(String userId){
+       return workRepository.existsByOwnerId(userId);
     }
 
     @Override
