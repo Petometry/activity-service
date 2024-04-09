@@ -1,7 +1,6 @@
 package com.petometry.activity.service;
 
 import com.petometry.activity.repository.WorkRepository;
-import com.petometry.activity.repository.model.Activity;
 import com.petometry.activity.repository.model.Work;
 import com.petometry.activity.rest.model.WorkDto;
 import com.petometry.activity.rest.model.work.WorkActivity;
@@ -44,9 +43,16 @@ public class WorkServiceImpl implements WorkService {
     }
 
     @Override
-    public WorkDto getWork(String userId) {
+    public WorkDto getWork(Jwt jwt, String userId) {
         Optional<Work> workOptional = workRepository.findByOwnerId(userId);
-        return workOptional.map(this::convertToWorkDto).orElse(null);
+        if (workOptional.isEmpty()){
+            return null;
+        }
+        Work work = workOptional.get();
+        if (LocalDateTime.now().isAfter(work.getEndTime())){
+            finishActivity(jwt, work);
+        }
+        return convertToWorkDto(work);
     }
 
     @Override
@@ -55,9 +61,9 @@ public class WorkServiceImpl implements WorkService {
         workRepository.deleteByOwnerId(userId);
     }
 
-    @Override
-    public void finishActivity(Jwt jwt, Activity activity) {
-        currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
+    public void finishActivity(Jwt jwt, Work work) {
+        currencyService.getPayedByServer(jwt, work.getOwnerId(), work.getReward());
+        workRepository.deleteByOwnerId(work.getOwnerId());
     }
 
     private WorkDto convertToWorkDto(Work createdWork) {
