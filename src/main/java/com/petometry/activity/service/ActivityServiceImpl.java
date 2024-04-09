@@ -48,9 +48,4 @@ public class ActivityServiceImpl implements ActivityService {
     public Boolean hasActivity(String userId){
        return workRepository.existsByOwnerId(userId);
     }
-
-    @Override
-    public void stopActivity(String userId) {
-        activityRepository.deleteByOwnerId(userId);
-    }
 }
