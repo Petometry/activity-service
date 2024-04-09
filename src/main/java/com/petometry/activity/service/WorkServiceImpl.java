@@ -48,6 +48,16 @@ public class WorkServiceImpl implements WorkService {
     }
 
     @Override
+    public WorkDto getWork(String userId) {
+
+        Optional<Work> workOptional = workRepository.findByUserId(userId);
+        if(workOptional.isEmpty()){
+            return null;
+        }
+        return modelMapper.map(workOptional.get(), WorkDto.class);
+    }
+
+    @Override
     public void finishActivity(Jwt jwt, Activity activity) {
         currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
     }
