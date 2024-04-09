@@ -56,7 +56,7 @@ public class WorkResource extends AbstractResource {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("getWork started for userId={}", userId);
-        WorkDto work = workService.getWork(userId, workActivity);
+        WorkDto work = workService.getWork(userId);
         log.info("getWork finished for userId={} work={}", getUserId(jwt), work);
         return work;
     }
