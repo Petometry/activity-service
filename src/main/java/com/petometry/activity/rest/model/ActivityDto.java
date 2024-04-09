@@ -21,4 +21,6 @@ public class ActivityDto implements Serializable {
     private LocalDateTime endTime;
 
     private Double reward;
+
+    private Boolean collectable;
 }
