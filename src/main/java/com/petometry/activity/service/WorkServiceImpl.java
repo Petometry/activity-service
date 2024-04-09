@@ -58,7 +58,6 @@ public class WorkServiceImpl implements WorkService {
         }
 
         Work work = new Work();
-        work.setType(WORK);
         work.setOwnerId(userId);
         work.setStartTime(LocalDateTime.now());
         work.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
