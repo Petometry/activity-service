@@ -61,7 +61,7 @@ public class WorkServiceImpl implements WorkService {
         work.setOwnerId(userId);
         work.setStartTime(LocalDateTime.now());
         work.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
-        work.setReward(calculateReward(activity));
+        work.setReward(calculateReward(work));
         Work createdWork = workRepository.save(work);
         return modelMapper.map(createdWork, ActivityDto.class);
     }
@@ -73,6 +73,11 @@ public class WorkServiceImpl implements WorkService {
 
     private static double calculateReward(Activity activity) {
         long hoursBetween = activity.getStartTime().until(activity.getEndTime(), ChronoUnit.HOURS);
+        return hoursBetween * 0.1;
+    }
+
+        private static double calculateReward(Work work) {
+        long hoursBetween = work.getStartTime().until(work.getEndTime(), ChronoUnit.HOURS);
         return hoursBetween * 0.1;
     }
 }
