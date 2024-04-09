@@ -2,6 +2,7 @@ package com.petometry.activity.rest;
 
 import com.frameboter.rest.AbstractResource;
 import com.petometry.activity.rest.model.ActivityDto;
+import com.petometry.activity.rest.model.WorkDto;
 import com.petometry.activity.rest.model.work.WorkActivity;
 import com.petometry.activity.service.WorkService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/activities/work")
 public class WorkResource extends AbstractResource {
 
-
     private final WorkService workService;
-
 
     // @formatter:off
     @Operation(summary = "Starts a new work activity", description = "Starts a new work activity. There can only be 1 active activity at any time")
@@ -40,8 +39,8 @@ public class WorkResource extends AbstractResource {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("startWork started for userId={} activityRequest={}", userId, workActivity);
-        ActivityDto activity = workService.createWork(userId, workActivity);
-        log.info("startWork finished for userId={} activity={}", getUserId(jwt), activity);
-        return activity;
+        WorkDto work = workService.createWork(userId, workActivity);
+        log.info("startWork finished for userId={} work={}", getUserId(jwt), work);
+        return work;
     }
 }
