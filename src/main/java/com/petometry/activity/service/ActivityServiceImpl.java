@@ -4,8 +4,10 @@ import com.petometry.activity.repository.WorkRepository;
 import com.petometry.activity.repository.model.Work;
 import com.petometry.activity.rest.model.ActivityDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Optional<Work> workOptional = workRepository.findByOwnerId(userId);
         if (workOptional.isEmpty()) {
-            return null;
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         Work work = workOptional.get();
         return convertWorkToActivityDto(work);
