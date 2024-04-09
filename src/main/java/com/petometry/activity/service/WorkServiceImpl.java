@@ -74,6 +74,7 @@ public class WorkServiceImpl implements WorkService {
 
     private static double calculateReward(Work work) {
         long hoursBetween = work.getStartTime().until(work.getEndTime(), ChronoUnit.HOURS);
-        return hoursBetween * 0.1;
+        double reward = hoursBetween * 0.1;
+        return  Math.round(reward * 100.00) / 100.00;
     }
 }
