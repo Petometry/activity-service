@@ -34,9 +34,12 @@ public class ActivityServiceImpl implements ActivityService {
             return null;
         }
         
-        Work activity = workOptional.get();
-        Boolean isCollectable = LocalDateTime.now().isAfter(activity.getEndTime());
-        ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
+        Work work = workOptional.get();
+        Boolean isCollectable = LocalDateTime.now().isAfter(work.getEndTime());
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setStartTime(work.getStartTime());
+        activityDto.setEndTime(work.getEndTime());
+        activityDto.setType(WORK);
         activityDto.setCollectable(isCollectable);
         return activityDto;
     }
