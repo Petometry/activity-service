@@ -9,6 +9,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 public interface WorkService {
 
     WorkDto createWork(String userId, WorkActivity workActivity);
+
+    WorkDto getWork(String userId);
     
     void finishActivity(Jwt jwt, Activity activity);
 }
