@@ -41,10 +41,11 @@ public class WorkResource extends AbstractResource {
     }
 
     // @formatter:off
-    @Operation(summary = "Get current work activity", description = "Gets the current users current activity null if none exists")
+    @Operation(summary = "Get current work activity", description = "Gets the current users current activity. Returns 404 if it doesn't exist")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "activity retrieved successfully"),
             @ApiResponse(responseCode = "401", description = "User is not logged in via Keycloak", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User is not working", content = @Content),
     })
     @GetMapping()
     public WorkDto getWork(@AuthenticationPrincipal Jwt jwt) {

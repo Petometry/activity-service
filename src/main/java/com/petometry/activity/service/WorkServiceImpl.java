@@ -46,7 +46,7 @@ public class WorkServiceImpl implements WorkService {
     public WorkDto getWork(Jwt jwt, String userId) {
         Optional<Work> workOptional = workRepository.findByOwnerId(userId);
         if (workOptional.isEmpty()){
-            return null;
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         Work work = workOptional.get();
         if (LocalDateTime.now().isAfter(work.getEndTime())){
