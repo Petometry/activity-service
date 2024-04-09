@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface WorkRepository extends JpaRepository<Work, Long> {
 
-    Optional<Activity> findByOwnerId(String ownerId);
+    Optional<Work> findByOwnerId(String ownerId);
 
     boolean existsByOwnerId(String ownerId);
 
