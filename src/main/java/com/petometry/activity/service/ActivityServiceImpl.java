@@ -35,10 +35,12 @@ public class ActivityServiceImpl implements ActivityService {
         
         Activity activity = activityOptional.get();
         Boolean isCollectable = LocalDateTime.now().isAfter(activity.getEndTime());
+        ActivityDto activityDto;
         if (isCollectable) {
-            finishActivity(jwt, activity);
+            activityDto = finishActivity(jwt, activity);
+        }else{
+         activityDto = modelMapper(activity, ActivityDto.class);
         }
-        ActivityDto activityDto = modelMapper.map(activity, ActivityDto.class);
         activityDto.setCollectable(isCollectable);
         return activityDto;
     }
@@ -48,13 +50,17 @@ public class ActivityServiceImpl implements ActivityService {
         activityRepository.deleteByOwnerId(userId);
     }
 
-    private void finishActivity(Jwt jwt, Activity activity) {
+    private ActivityDto finishActivity(Jwt jwt, Activity activity) {
 
+        ActivityDto activityDto;
         if (WORK.equals(activity.getType())) {
             workService.finishActivity(jwt, activity);
+            activityDto = modelMapper(activity, ActivityDto.class);
+            activityDto.setCurrency("geocoin");
         } else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         activityRepository.delete(activity);
+        return activityDto;
     }
 }
