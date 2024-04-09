@@ -1,7 +1,6 @@
 package com.petometry.activity.rest;
 
 import com.frameboter.rest.AbstractResource;
-import com.petometry.activity.rest.model.ActivityDto;
 import com.petometry.activity.rest.model.WorkDto;
 import com.petometry.activity.rest.model.work.WorkActivity;
 import com.petometry.activity.service.WorkService;
@@ -14,11 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,5 +54,21 @@ public class WorkResource extends AbstractResource {
         WorkDto work = workService.getWork(userId);
         log.info("getWork finished for userId={} work={}", getUserId(jwt), work);
         return work;
+    }
+
+    // @formatter:off
+    @Operation(summary = "Deletes the current work activity", description = "Deletes the current users current activity")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "activity retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "User is not logged in via Keycloak", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User is not working", content = @Content),
+    })
+    @DeleteMapping()
+    public void deleteWork(@AuthenticationPrincipal Jwt jwt) {
+        // @formatter:on
+        String userId = getUserId(jwt);
+        log.info("getWork started for userId={}", userId);
+        workService.deleteWork(userId);
+        log.info("getWork finished for userId={}", getUserId(jwt));
     }
 }

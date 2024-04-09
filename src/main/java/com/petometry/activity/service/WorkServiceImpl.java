@@ -1,38 +1,34 @@
 package com.petometry.activity.service;
 
-import com.petometry.activity.repository.ActivityRepository;
-import com.petometry.activity.repository.model.Activity;
-import com.petometry.activity.rest.model.ActivityDto;
 import com.petometry.activity.repository.WorkRepository;
-import com.petometry.activity.rest.model.work.WorkActivity;
+import com.petometry.activity.repository.model.Activity;
 import com.petometry.activity.repository.model.Work;
 import com.petometry.activity.rest.model.WorkDto;
+import com.petometry.activity.rest.model.work.WorkActivity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import java.util.Optional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-
-import static com.petometry.activity.repository.model.ActivityType.WORK;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class WorkServiceImpl implements WorkService {
 
     private final WorkRepository workRepository;
-    
+
     private final CurrencyService currencyService;
 
     private final ActivityService activityService;
 
     private final ModelMapper modelMapper;
 
-        @Override
+    @Override
     public WorkDto createWork(String userId, WorkActivity workActivity) {
         if (activityService.hasActivity(userId)) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(409));
@@ -44,16 +40,19 @@ public class WorkServiceImpl implements WorkService {
         work.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
         work.setReward(calculateReward(work));
         Work createdWork = workRepository.save(work);
-        return modelMapper.map(createdWork, WorkDto.class);
+        return convertToWorkDto(createdWork);
     }
 
     @Override
     public WorkDto getWork(String userId) {
         Optional<Work> workOptional = workRepository.findByOwnerId(userId);
-        if(workOptional.isEmpty()){
-            return null;
-        }
-        return modelMapper.map(workOptional.get(), WorkDto.class);
+        return workOptional.map(this::convertToWorkDto).orElse(null);
+    }
+
+    @Override
+    public void deleteWork(String userId) {
+
+        workRepository.deleteByOwnerId(userId);
     }
 
     @Override
@@ -61,12 +60,13 @@ public class WorkServiceImpl implements WorkService {
         currencyService.getPayedByServer(jwt, activity.getOwnerId(), activity.getReward());
     }
 
-    private static double calculateReward(Activity activity) {
-        long hoursBetween = activity.getStartTime().until(activity.getEndTime(), ChronoUnit.HOURS);
-        return hoursBetween * 0.1;
+    private WorkDto convertToWorkDto(Work createdWork) {
+        WorkDto workDto = modelMapper.map(createdWork, WorkDto.class);
+        workDto.setCollectable(LocalDateTime.now().isAfter(workDto.getEndTime()));
+        return workDto;
     }
 
-        private static double calculateReward(Work work) {
+    private static double calculateReward(Work work) {
         long hoursBetween = work.getStartTime().until(work.getEndTime(), ChronoUnit.HOURS);
         return hoursBetween * 0.1;
     }
