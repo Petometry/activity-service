@@ -48,7 +48,7 @@ public class WorkServiceImpl implements WorkService {
 
     @Override
     public WorkDto getWork(String userId) {
-        Optional<Work> workOptional = workRepository.findByUserId(userId);
+        Optional<Work> workOptional = workRepository.findByOwnerId(userId);
         if(workOptional.isEmpty()){
             return null;
         }
