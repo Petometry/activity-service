@@ -23,8 +23,6 @@ import static com.petometry.activity.repository.model.ActivityType.WORK;
 @RequiredArgsConstructor
 public class WorkServiceImpl implements WorkService {
 
-    private final ActivityRepository activityRepository;
-
     private final WorkRepository workRepository;
     
     private final CurrencyService currencyService;
@@ -32,23 +30,6 @@ public class WorkServiceImpl implements WorkService {
     private final ActivityService activityService;
 
     private final ModelMapper modelMapper;
-
-    @Override
-    public ActivityDto createActivity(String userId, WorkActivity workActivity) {
-
-        if (activityRepository.existsByOwnerId(userId)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
-        }
-
-        Activity activity = new Activity();
-        activity.setType(WORK);
-        activity.setOwnerId(userId);
-        activity.setStartTime(LocalDateTime.now());
-        activity.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
-        activity.setReward(calculateReward(activity));
-        Activity createdActivity = activityRepository.save(activity);
-        return modelMapper.map(createdActivity, ActivityDto.class);
-    }
 
         @Override
     public WorkDto createWork(String userId, WorkActivity workActivity) {
