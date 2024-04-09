@@ -22,5 +22,7 @@ public class ActivityDto implements Serializable {
 
     private Double reward;
 
+    private String currency;
+
     private Boolean collectable;
 }
