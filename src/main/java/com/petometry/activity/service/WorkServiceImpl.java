@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Optional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
