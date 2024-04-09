@@ -35,7 +35,7 @@ public class WorkResource extends AbstractResource {
             @ApiResponse(responseCode = "409", description = "User already has an active activity ", content = @Content),
     })
     @PostMapping()
-    public ActivityDto startWork(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid WorkActivity workActivity) {
+    public WorkDto startWork(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid WorkActivity workActivity) {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("startWork started for userId={} activityRequest={}", userId, workActivity);
