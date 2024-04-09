@@ -33,7 +33,6 @@ public class WorkServiceImpl implements WorkService {
 
         @Override
     public WorkDto createWork(String userId, WorkActivity workActivity) {
-
         if (activityService.hasActivity(userId)) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(409));
         }
@@ -49,7 +48,6 @@ public class WorkServiceImpl implements WorkService {
 
     @Override
     public WorkDto getWork(String userId) {
-
         Optional<Work> workOptional = workRepository.findByUserId(userId);
         if(workOptional.isEmpty()){
             return null;
