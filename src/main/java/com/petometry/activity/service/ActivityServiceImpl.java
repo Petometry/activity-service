@@ -39,7 +39,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (isCollectable) {
             activityDto = finishActivity(jwt, activity);
         }else{
-         activityDto = modelMapper(activity, ActivityDto.class);
+         activityDto = modelMapper.map(activity, ActivityDto.class);
         }
         activityDto.setCollectable(isCollectable);
         return activityDto;
@@ -55,7 +55,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityDto activityDto;
         if (WORK.equals(activity.getType())) {
             workService.finishActivity(jwt, activity);
-            activityDto = modelMapper(activity, ActivityDto.class);
+            activityDto = modelMapper.map(activity, ActivityDto.class);
             activityDto.setCurrency("geocoin");
         } else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
