@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class WorkActivity {
+public class WorkDto {
 
     /**
      * Time in hours that the activity should go for
