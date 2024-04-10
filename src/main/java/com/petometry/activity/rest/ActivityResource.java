@@ -24,11 +24,10 @@ public class ActivityResource extends AbstractResource {
     private final ActivityService activityService;
 
     // @formatter:off
-    @Operation(summary = "Returns current activity", description = "Returns the users current activity. Returns 404 if the user has none")
+    @Operation(summary = "Returns current activity", description = "Returns the users current activity. Returns null if the user has none")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "activity returned successfully"),
             @ApiResponse(responseCode = "401", description = "User is not logged in via Keycloak", content = @Content),
-            @ApiResponse(responseCode = "404", description = "User is not on an activity", content = @Content),
     })
     @GetMapping()
     public ActivityDto getCurrentActivity(@AuthenticationPrincipal Jwt jwt) {
