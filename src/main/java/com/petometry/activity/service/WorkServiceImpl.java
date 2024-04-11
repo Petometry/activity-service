@@ -49,9 +49,6 @@ public class WorkServiceImpl implements WorkService {
             return null;
         }
         Work work = workOptional.get();
-        if (LocalDateTime.now().isAfter(work.getEndTime())){
-            finishActivity(jwt, work);
-        }
         return convertToWorkDto(work);
     }
 
@@ -66,6 +63,19 @@ public class WorkServiceImpl implements WorkService {
         workRepository.deleteByOwnerId(work.getOwnerId());
     }
 
+    public void collectWorkReward(String userId){
+        Optional<Work> workOptional = workRepository.findByOwnerId(userId);
+        if (workOptional.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.valueOf(404);
+        }
+        Work work = workOptional.get();
+        if (LocalDateTime.now().isAfter(work.getEndTime())){
+            finishActivity(jwt, work);
+        }else{
+            throw new ResponseStatusException(HttpStatus.valueOf(425);
+        }
+    }
+
     private WorkDto convertToWorkDto(Work createdWork) {
         WorkDto workDto = modelMapper.map(createdWork, WorkDto.class);
         workDto.setCollectable(LocalDateTime.now().isAfter(workDto.getEndTime()));
@@ -77,4 +87,6 @@ public class WorkServiceImpl implements WorkService {
         double reward = hoursBetween * 0.1;
         return  Math.round(reward * 100.00) / 100.00;
     }
+
+
 }
