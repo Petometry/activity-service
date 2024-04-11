@@ -11,4 +11,6 @@ public interface WorkService {
     WorkDto getWork(Jwt jwt, String userId);
 
     void deleteWork(String userId);
+
+    void collectWork(String userId);
 }
