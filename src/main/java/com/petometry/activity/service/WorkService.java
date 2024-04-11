@@ -12,5 +12,5 @@ public interface WorkService {
 
     void deleteWork(String userId);
 
-    void collectWork(String userId);
+    void collectWorkReward(String userId);
 }
