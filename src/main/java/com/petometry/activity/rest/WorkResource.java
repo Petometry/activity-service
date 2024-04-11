@@ -84,7 +84,7 @@ public class WorkResource extends AbstractResource {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("collectWorkReward started for userId={}", userId);
-        workService.collectWork(userId);
+        workService.collectWorkReward(userId);
         log.info("collectWorkReward finished for userId={}", getUserId(jwt));
     }
 }
