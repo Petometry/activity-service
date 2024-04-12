@@ -79,12 +79,12 @@ public class WorkResource extends AbstractResource {
             @ApiResponse(responseCode = "401", description = "User is not logged in via Keycloak", content = @Content),
             @ApiResponse(responseCode = "404", description = "User is not working", content = @Content),
     })
-    @PutMapping("/collectable)
+    @PutMapping("/collectable")
     public void collectWorkReward(@AuthenticationPrincipal Jwt jwt) {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("collectWorkReward started for userId={}", userId);
-        workService.collectWorkReward(userId);
+        workService.collectWorkReward(jwt, userId);
         log.info("collectWorkReward finished for userId={}", getUserId(jwt));
     }
 }

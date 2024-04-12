@@ -6,6 +6,7 @@ import com.petometry.activity.rest.model.work.WorkActivity;
 import com.petometry.activity.rest.model.work.WorkDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -63,16 +64,16 @@ public class WorkServiceImpl implements WorkService {
         workRepository.deleteByOwnerId(work.getOwnerId());
     }
 
-    public void collectWorkReward(String userId){
+    public void collectWorkReward(Jwt jwt, String userId){
         Optional<Work> workOptional = workRepository.findByOwnerId(userId);
         if (workOptional.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.valueOf(404);
+            throw new ResponseStatusException(HttpStatus.valueOf(404));
         }
         Work work = workOptional.get();
-        if (LocalDateTime.now().isAfter(work.getEndTime())){
+        if (ZonedDateTime.now().isAfter(work.getEndTime())){
             finishActivity(jwt, work);
         }else{
-            throw new ResponseStatusException(HttpStatus.valueOf(425);
+            throw new ResponseStatusException(HttpStatus.valueOf(425));
         }
     }
 
