@@ -2,8 +2,8 @@ package com.petometry.activity.service;
 
 import com.petometry.activity.repository.WorkRepository;
 import com.petometry.activity.repository.model.Work;
-import com.petometry.activity.rest.model.WorkDto;
 import com.petometry.activity.rest.model.work.WorkActivity;
+import com.petometry.activity.rest.model.work.WorkDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatusCode;
@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
@@ -35,8 +35,8 @@ public class WorkServiceImpl implements WorkService {
 
         Work work = new Work();
         work.setOwnerId(userId);
-        work.setStartTime(LocalDateTime.now());
-        work.setEndTime(LocalDateTime.now().plusHours(workActivity.getDuration()));
+        work.setStartTime(ZonedDateTime.now());
+        work.setEndTime(ZonedDateTime.now().plusHours(workActivity.getDuration()));
         work.setReward(calculateReward(work));
         Work createdWork = workRepository.save(work);
         return convertToWorkDto(createdWork);
@@ -49,7 +49,7 @@ public class WorkServiceImpl implements WorkService {
             return null;
         }
         Work work = workOptional.get();
-        if (LocalDateTime.now().isAfter(work.getEndTime())){
+        if (ZonedDateTime.now().isAfter(work.getEndTime())){
             finishActivity(jwt, work);
         }
         return convertToWorkDto(work);
@@ -68,7 +68,7 @@ public class WorkServiceImpl implements WorkService {
 
     private WorkDto convertToWorkDto(Work createdWork) {
         WorkDto workDto = modelMapper.map(createdWork, WorkDto.class);
-        workDto.setCollectable(LocalDateTime.now().isAfter(workDto.getEndTime()));
+        workDto.setCollectable(ZonedDateTime.now().isAfter(workDto.getEndTime()));
         return workDto;
     }
 

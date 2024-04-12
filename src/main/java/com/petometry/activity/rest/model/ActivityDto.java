@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * DTO for {@link com.petometry.activity.repository.model.Activity}
@@ -16,9 +16,9 @@ public class ActivityDto implements Serializable {
 
     private ActivityType type;
 
-    private LocalDateTime startTime;
+    private ZonedDateTime  startTime;
 
-    private LocalDateTime endTime;
+    private ZonedDateTime endTime;
 
     private Boolean collectable;
 }

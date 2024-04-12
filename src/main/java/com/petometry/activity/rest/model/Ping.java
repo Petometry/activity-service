@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +14,5 @@ public class Ping {
     private String userName;
 
     @Schema(name = "createdAt", example = "1999-06-13T10:00:00.0000000", description = "Date and time at which the ping was created", pattern = "YYYY-MM-DDThh:mm:ss.ms")
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 }

@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @RestController
 public class PingResource extends AbstractResource {
@@ -25,6 +25,6 @@ public class PingResource extends AbstractResource {
     @PostMapping("/ping")
     Ping createPing(@AuthenticationPrincipal Jwt jwt) {
         // @formatter:on
-        return new Ping(getUserName(jwt), LocalDateTime.now());
+        return new Ping(getUserName(jwt), ZonedDateTime.now());
     }
 }

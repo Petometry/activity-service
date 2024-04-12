@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.petometry.activity.repository.model.ActivityType.WORK;
@@ -35,7 +35,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     private static ActivityDto convertWorkToActivityDto(Work work) {
-        Boolean isCollectable = LocalDateTime.now().isAfter(work.getEndTime());
+        Boolean isCollectable = ZonedDateTime.now().isAfter(work.getEndTime());
         ActivityDto activityDto = new ActivityDto();
         activityDto.setStartTime(work.getStartTime());
         activityDto.setEndTime(work.getEndTime());

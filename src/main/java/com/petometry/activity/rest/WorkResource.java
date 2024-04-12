@@ -1,8 +1,8 @@
 package com.petometry.activity.rest;
 
 import com.frameboter.rest.AbstractResource;
-import com.petometry.activity.rest.model.WorkDto;
 import com.petometry.activity.rest.model.work.WorkActivity;
+import com.petometry.activity.rest.model.work.WorkDto;
 import com.petometry.activity.service.WorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

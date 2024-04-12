@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
@@ -21,10 +21,10 @@ public class Work {
     private String ownerId;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private ZonedDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private ZonedDateTime  endTime;
 
     @Column(name = "reward", nullable = false)
     private Double reward;

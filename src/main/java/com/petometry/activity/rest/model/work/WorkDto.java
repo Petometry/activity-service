@@ -1,10 +1,10 @@
-package com.petometry.activity.rest.model;
+package com.petometry.activity.rest.model.work;
 
 import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * DTO for {@link com.petometry.activity.repository.model.Work}
@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @ToString
 public class WorkDto implements Serializable {
 
-    private LocalDateTime startTime;
+    private ZonedDateTime startTime;
 
-    private LocalDateTime endTime;
+    private ZonedDateTime  endTime;
 
     private Double reward;
 
