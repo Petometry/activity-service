@@ -71,4 +71,20 @@ public class WorkResource extends AbstractResource {
         workService.deleteWork(userId);
         log.info("getWork finished for userId={}", getUserId(jwt));
     }
+
+    // @formatter:off
+    @Operation(summary = "Collects the current work activity if it is collectable", description = "Collects the current users current work activity if it is finished and collectable")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "reward collected successfully"),
+            @ApiResponse(responseCode = "401", description = "User is not logged in via Keycloak", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User is not working", content = @Content),
+    })
+    @PutMapping("/collectable)
+    public void collectWorkReward(@AuthenticationPrincipal Jwt jwt) {
+        // @formatter:on
+        String userId = getUserId(jwt);
+        log.info("collectWorkReward started for userId={}", userId);
+        workService.collectWorkReward(userId);
+        log.info("collectWorkReward finished for userId={}", getUserId(jwt));
+    }
 }

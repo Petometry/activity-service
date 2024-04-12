@@ -49,9 +49,6 @@ public class WorkServiceImpl implements WorkService {
             return null;
         }
         Work work = workOptional.get();
-        if (ZonedDateTime.now().isAfter(work.getEndTime())){
-            finishActivity(jwt, work);
-        }
         return convertToWorkDto(work);
     }
 
@@ -64,6 +61,19 @@ public class WorkServiceImpl implements WorkService {
     public void finishActivity(Jwt jwt, Work work) {
         currencyService.getPayedByServer(jwt, work.getOwnerId(), work.getReward());
         workRepository.deleteByOwnerId(work.getOwnerId());
+    }
+
+    public void collectWorkReward(String userId){
+        Optional<Work> workOptional = workRepository.findByOwnerId(userId);
+        if (workOptional.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.valueOf(404);
+        }
+        Work work = workOptional.get();
+        if (LocalDateTime.now().isAfter(work.getEndTime())){
+            finishActivity(jwt, work);
+        }else{
+            throw new ResponseStatusException(HttpStatus.valueOf(425);
+        }
     }
 
     private WorkDto convertToWorkDto(Work createdWork) {
