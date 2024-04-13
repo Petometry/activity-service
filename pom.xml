@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.petometry</groupId>
-    <artifactId>activity</artifactId>
+    <artifactId>activity-service</artifactId>
     <version>0.1.0</version>
-    <name>activity</name>
-    <description>activity</description>
+    <name>activity-service</name>
+    <description>activity-service</description>
     <properties>
         <java.version>21</java.version>
     </properties>
