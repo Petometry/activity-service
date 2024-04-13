@@ -1,7 +1,7 @@
 package com.petometry.activity.service;
 
 import com.frameboter.service.HttpService;
-import com.petometry.activity.service.model.currency.CurrencyBalance;
+import com.petometry.activity.service.model.currency.CurrencyGeocoinsBalance;
 import com.petometry.activity.service.model.currency.CurrencyBalances;
 import com.petometry.activity.service.model.currency.CurrencyTransaction;
 import com.petometry.activity.service.model.currency.CurrencyType;
@@ -22,17 +22,17 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Value("${backend.domain.prefix}")
     private String urlPrefix;
 
-    private static final String serviceName = "currency.";
+    private static final String SERVICE_NAME = "currency.";
 
     @Override
     public CurrencyBalances getBalances(Jwt jwt, String userid) {
 
-        String url = urlPrefix + serviceName + baseDomain + "/balances";
+        String url = urlPrefix + SERVICE_NAME + baseDomain + "/geocoins";
         return httpService.sendGetRequest(url, jwt, CurrencyBalances.class);
     }
 
     @Override
-    public CurrencyBalance payServer(Jwt jwt, String userId, Double value) {
+    public CurrencyGeocoinsBalance payServer(Jwt jwt, String userId, Double value) {
 
         CurrencyTransaction currencyTransaction = new CurrencyTransaction();
         currencyTransaction.setCurrency(CurrencyType.GEOCOIN);
@@ -40,12 +40,12 @@ public class CurrencyServiceImpl implements CurrencyService {
         currencyTransaction.setValue(value);
         currencyTransaction.setSource(userId);
 
-        String url = urlPrefix + serviceName + baseDomain + "/transactions";
-        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyBalance.class);
+        String url = urlPrefix + SERVICE_NAME + baseDomain + "/transactions";
+        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyGeocoinsBalance.class);
     }
 
     @Override
-    public CurrencyBalance getPayedByServer(Jwt jwt, String userId, double value) {
+    public CurrencyGeocoinsBalance getPayedByServer(Jwt jwt, String userId, double value) {
 
         CurrencyTransaction currencyTransaction = new CurrencyTransaction();
         currencyTransaction.setCurrency(CurrencyType.GEOCOIN);
@@ -53,8 +53,8 @@ public class CurrencyServiceImpl implements CurrencyService {
         currencyTransaction.setValue(value);
         currencyTransaction.setSource("SERVER");
 
-        String url = urlPrefix + serviceName + baseDomain + "/transactions";
-        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyBalance.class);
+        String url = urlPrefix + SERVICE_NAME + baseDomain + "/transactions";
+        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyGeocoinsBalance.class);
     }
 
 
