@@ -1,8 +1,8 @@
 package com.petometry.activity.service;
 
 import com.frameboter.service.HttpService;
-import com.petometry.activity.service.model.currency.CurrencyGeocoinsBalance;
-import com.petometry.activity.service.model.currency.CurrencyBalances;
+import com.petometry.activity.service.model.currency.CurrencyBalance;
+import com.petometry.activity.service.model.currency.CurrencyGeocoinBalance;
 import com.petometry.activity.service.model.currency.CurrencyTransaction;
 import com.petometry.activity.service.model.currency.CurrencyType;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +25,14 @@ public class CurrencyServiceImpl implements CurrencyService {
     private static final String SERVICE_NAME = "currency.";
 
     @Override
-    public CurrencyBalances getBalances(Jwt jwt, String userid) {
+    public CurrencyGeocoinBalance getBalances(Jwt jwt, String userid) {
 
         String url = urlPrefix + SERVICE_NAME + baseDomain + "/geocoins";
-        return httpService.sendGetRequest(url, jwt, CurrencyBalances.class);
+        return httpService.sendGetRequest(url, jwt, CurrencyGeocoinBalance.class);
     }
 
     @Override
-    public CurrencyGeocoinsBalance payServer(Jwt jwt, String userId, Double value) {
+    public CurrencyBalance payServer(Jwt jwt, String userId, Double value) {
 
         CurrencyTransaction currencyTransaction = new CurrencyTransaction();
         currencyTransaction.setCurrency(CurrencyType.GEOCOIN);
@@ -41,11 +41,11 @@ public class CurrencyServiceImpl implements CurrencyService {
         currencyTransaction.setSource(userId);
 
         String url = urlPrefix + SERVICE_NAME + baseDomain + "/transactions";
-        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyGeocoinsBalance.class);
+        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyBalance.class);
     }
 
     @Override
-    public CurrencyGeocoinsBalance getPayedByServer(Jwt jwt, String userId, double value) {
+    public CurrencyBalance getPayedByServer(Jwt jwt, String userId, double value) {
 
         CurrencyTransaction currencyTransaction = new CurrencyTransaction();
         currencyTransaction.setCurrency(CurrencyType.GEOCOIN);
@@ -54,7 +54,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         currencyTransaction.setSource("SERVER");
 
         String url = urlPrefix + SERVICE_NAME + baseDomain + "/transactions";
-        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyGeocoinsBalance.class);
+        return httpService.sendPostRequest(url, jwt, currencyTransaction, CurrencyBalance.class);
     }
 
 
