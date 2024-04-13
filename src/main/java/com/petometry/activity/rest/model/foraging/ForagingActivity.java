@@ -1,4 +1,4 @@
-package com.petometry.activity.rest.model.work;
+package com.petometry.activity.rest.model.foraging;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class WorkActivity {
+public class ForagingActivity {
 
     /**
      * Time in hours that the activity should go for
