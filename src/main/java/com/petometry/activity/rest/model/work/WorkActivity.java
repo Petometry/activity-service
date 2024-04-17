@@ -14,7 +14,7 @@ public class WorkActivity {
      * Time in hours that the activity should go for
      */
     @NotNull
-    @Min(value = 1, message = "Duration can not be shorter than 1 minute")
-    @Max(value = 5, message = "Duration can not be longer than 5 minutes")
+    @Min(value = 1, message = "Duration can not be shorter than 1 hours")
+    @Max(value = 10, message = "Duration can not be longer than 10 hours")
     private Long duration;
 }
