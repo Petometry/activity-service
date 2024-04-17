@@ -16,6 +16,8 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import static com.petometry.activity.repository.model.ActivityType.WORK;
+
 @Service
 @RequiredArgsConstructor
 public class WorkServiceImpl implements WorkService {
@@ -80,6 +82,7 @@ public class WorkServiceImpl implements WorkService {
     private WorkDto convertToWorkDto(Work createdWork) {
         WorkDto workDto = modelMapper.map(createdWork, WorkDto.class);
         workDto.setCollectable(ZonedDateTime.now().isAfter(workDto.getEndTime()));
+        workDto.setType(WORK);
         return workDto;
     }
 
