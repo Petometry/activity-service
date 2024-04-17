@@ -3,6 +3,7 @@ package com.petometry.activity.rest;
 import com.frameboter.rest.AbstractResource;
 import com.petometry.activity.rest.model.work.WorkActivity;
 import com.petometry.activity.rest.model.work.WorkDto;
+import com.petometry.activity.rest.model.work.WorkReward;
 import com.petometry.activity.service.WorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -80,11 +81,12 @@ public class WorkResource extends AbstractResource {
             @ApiResponse(responseCode = "404", description = "User is not working", content = @Content),
     })
     @PutMapping("/collectable")
-    public void collectWorkReward(@AuthenticationPrincipal Jwt jwt) {
+    public WorkReward collectWorkReward(@AuthenticationPrincipal Jwt jwt) {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("collectWorkReward started for userId={}", userId);
-        workService.collectWorkReward(jwt, userId);
+        WorkReward reward = workService.collectWorkReward(jwt, userId);
         log.info("collectWorkReward finished for userId={}", getUserId(jwt));
+        return reward;
     }
 }
