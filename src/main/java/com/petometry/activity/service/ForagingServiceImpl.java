@@ -7,6 +7,7 @@ import com.petometry.activity.rest.model.foraging.ForagingDto;
 import com.petometry.activity.rest.model.foraging.ForagingReward;
 import com.petometry.activity.service.model.currency.CurrencyPetFoodBalances;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -16,6 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.Random;
+
+import static com.petometry.activity.repository.model.ActivityType.FORAGING;
 
 
 @Service
@@ -27,6 +30,8 @@ public class ForagingServiceImpl implements ForagingService {
     private final ActivityService activityService;
 
     private final CurrencyService currencyService;
+
+    private final ModelMapper modelMapper;
 
     @Override
     public ForagingDto createForaging(String userId, ForagingActivity foragingActivity) {
@@ -88,10 +93,9 @@ public class ForagingServiceImpl implements ForagingService {
 
     private ForagingDto convertToForagingDto(Foraging foraging) {
 
-        ForagingDto foragingDto = new ForagingDto();
-        foragingDto.setStartTime(foraging.getStartTime());
-        foragingDto.setEndTime(foraging.getEndTime());
+        ForagingDto foragingDto = modelMapper.map(foraging, ForagingDto.class);
         foragingDto.setCollectable(ZonedDateTime.now().isAfter(foragingDto.getEndTime()));
+        foragingDto.setType(FORAGING);
         ForagingReward reward = new ForagingReward();
         reward.setCircle(foraging.getCircleReward());
         reward.setTriangle(foraging.getTriangleReward());
