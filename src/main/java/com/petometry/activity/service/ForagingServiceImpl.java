@@ -68,7 +68,7 @@ public class ForagingServiceImpl implements ForagingService {
     }
 
     @Override
-    public void collectForagingReward(Jwt jwt, String userId) {
+    public ForagingReward collectForagingReward(Jwt jwt, String userId) {
         Optional<Foraging> foragingOptional = foragingRepository.findByOwnerId(userId);
         if (foragingOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.valueOf(404));
@@ -79,6 +79,11 @@ public class ForagingServiceImpl implements ForagingService {
         } else {
             throw new ResponseStatusException(HttpStatus.valueOf(425));
         }
+        ForagingReward reward = new ForagingReward();
+        reward.setRectangle(foraging.getRectangleReward());
+        reward.setTriangle(foraging.getTriangleReward());
+        reward.setCircle(foraging.getCircleReward());
+        return reward;
     }
 
     private void finishActivity(Jwt jwt, Foraging foraging) {

@@ -3,6 +3,7 @@ package com.petometry.activity.rest;
 import com.frameboter.rest.AbstractResource;
 import com.petometry.activity.rest.model.foraging.ForagingActivity;
 import com.petometry.activity.rest.model.foraging.ForagingDto;
+import com.petometry.activity.rest.model.foraging.ForagingReward;
 import com.petometry.activity.service.ForagingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -80,11 +81,12 @@ public class ForagingResource extends AbstractResource {
             @ApiResponse(responseCode = "404", description = "User is not foraging", content = @Content),
     })
     @PutMapping("/collectable")
-    public void collectForagingReward(@AuthenticationPrincipal Jwt jwt) {
+    public ForagingReward collectForagingReward(@AuthenticationPrincipal Jwt jwt) {
         // @formatter:on
         String userId = getUserId(jwt);
         log.info("collectForagingReward started for userId={}", userId);
-        foragingService.collectForagingReward(jwt, userId);
+        ForagingReward reward = foragingService.collectForagingReward(jwt, userId);
         log.info("collectForagingReward finished for userId={}", getUserId(jwt));
+        return reward;
     }
 }
