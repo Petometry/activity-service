@@ -33,6 +33,8 @@ public class ForagingServiceImpl implements ForagingService {
 
     private final ModelMapper modelMapper;
 
+    private final Random random;
+
     @Override
     public ForagingDto createForaging(String userId, ForagingActivity foragingActivity) {
 
@@ -111,11 +113,10 @@ public class ForagingServiceImpl implements ForagingService {
 
     private ForagingReward calculateReward(ForagingActivity foraging) {
         ForagingReward foragingReward = new ForagingReward();
-        long maxReward = foraging.getDuration() * 4;
-        Random random = new Random();
-        foragingReward.setCircle(random.nextLong(1, maxReward - 2));
+        long maxReward = foraging.getDuration() * 5;
+        foragingReward.setCircle(this.random.nextLong(foraging.getDuration(), maxReward - (2 * foraging.getDuration())));
         maxReward = maxReward - foragingReward.getCircle();
-        foragingReward.setTriangle(random.nextLong(1, maxReward - 1));
+        foragingReward.setTriangle(this.random.nextLong(foraging.getDuration(), maxReward - foraging.getDuration()));
         maxReward = maxReward - foragingReward.getTriangle();
         foragingReward.setRectangle(maxReward);
         return foragingReward;
