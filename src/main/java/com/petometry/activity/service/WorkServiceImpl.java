@@ -4,6 +4,7 @@ import com.petometry.activity.repository.WorkRepository;
 import com.petometry.activity.repository.model.Work;
 import com.petometry.activity.rest.model.work.WorkActivity;
 import com.petometry.activity.rest.model.work.WorkDto;
+import com.petometry.activity.rest.model.work.WorkReward;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+
+import static com.petometry.activity.repository.model.ActivityType.WORK;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +67,7 @@ public class WorkServiceImpl implements WorkService {
         workRepository.deleteByOwnerId(work.getOwnerId());
     }
 
-    public void collectWorkReward(Jwt jwt, String userId){
+    public WorkReward collectWorkReward(Jwt jwt, String userId){
         Optional<Work> workOptional = workRepository.findByOwnerId(userId);
         if (workOptional.isEmpty()){
             throw new ResponseStatusException(HttpStatus.valueOf(404));
@@ -75,11 +78,15 @@ public class WorkServiceImpl implements WorkService {
         }else{
             throw new ResponseStatusException(HttpStatus.valueOf(425));
         }
+        WorkReward reward = new WorkReward();
+        reward.setGeocoin(work.getReward());
+        return reward;
     }
 
     private WorkDto convertToWorkDto(Work createdWork) {
         WorkDto workDto = modelMapper.map(createdWork, WorkDto.class);
         workDto.setCollectable(ZonedDateTime.now().isAfter(workDto.getEndTime()));
+        workDto.setType(WORK);
         return workDto;
     }
 

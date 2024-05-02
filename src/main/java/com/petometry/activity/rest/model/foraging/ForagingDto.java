@@ -1,4 +1,4 @@
-package com.petometry.activity.rest.model.work;
+package com.petometry.activity.rest.model.foraging;
 
 import com.petometry.activity.rest.model.ActivityDto;
 import lombok.Data;
@@ -11,8 +11,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ToString
-public class WorkDto extends ActivityDto {
+public class ForagingDto extends ActivityDto {
 
-    private Double reward;
+    private ForagingReward reward;
 
 }

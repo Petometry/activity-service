@@ -4,7 +4,6 @@ import com.petometry.activity.repository.model.ActivityType;
 import lombok.Data;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 /**
@@ -12,7 +11,7 @@ import java.time.ZonedDateTime;
  */
 @Data
 @ToString
-public class ActivityDto implements Serializable {
+public class ActivityDto {
 
     private ActivityType type;
 
